@@ -27,7 +27,7 @@
 # library(Rcplex)
 #############################################
 rm(list=ls(all=TRUE));
-root="C:\\Users\\lwang724\\Dropbox (GaTech)\\IC code\\Intergration\\github\\"
+root="C:\\" # path
 source(paste(root,"Steps_f.R",sep=''))
 source(paste(root,"DataProcedure_f.R",sep=''))
 source(paste(root,"BCD_f.R",sep=""))
