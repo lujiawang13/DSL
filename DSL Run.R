@@ -9,7 +9,7 @@
 #   lamda1/lamda2: tuning paramters
 #   mu1/mu2: tuning paramters
 #   area_k: estimated column/row number of the discriminant subgraph
-#   Opt_method: method of solving quadratic programming
+#   Opt_method: method of solving quadratic programming. Opt_method="RCplex" or "Rsymphony" 
 #   structure: weighted graph difference or structure difference.structure='binarystructure' or 'weightedstructure'
 #   betamethod: method to estimate one column/row in Theta
 
@@ -81,8 +81,7 @@ TrainSi_List<-dataSi_f(X_List=TrainX_List,nivector=Trainnivector,p)
 TestSi_List<-dataSi_f(X_List=TestX_List,nivector=Testnivector,p)
 
 # DSL training
-# Opt_method="RCplex"
-Opt_method="Rsymphony"
+Opt_method="RCplex"
 Constraints="NoConstraints"
 # structure='binarystructure'
 structure='weightedstructure'
@@ -90,7 +89,7 @@ betamethod='majorizationminimization'
 
 h=100;
 lamda=1;
-mu=1e-4
+mu=0.01
 h1=h;h2=h
 lamda1=lamda;lamda2=lamda
 mu1=mu;mu2=mu
