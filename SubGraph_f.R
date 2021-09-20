@@ -34,8 +34,7 @@ Opt_subPos_f<-function(matrix_diff,area_k,p,ntimes,Opt_method){
       pos_matrix<-rbind(pos_matrix,pos_temp)
     }
   }else if(Opt_method=="RCplex"){
-    if(Constraints=="Constraints"){opt_result<-RCplexConstraints_f(matrix_diff,area_k,p,ntimes)}else{
-      opt_result<-RCplex_f(matrix_diff,area_k,p,ntimes)}
+    opt_result<-RCplex_f(matrix_diff,area_k,p,ntimes)
     pos_matrix<-c()
     sol_vector_sum=0
     for(i in 1:length(opt_result)){
@@ -151,50 +150,4 @@ RCplex_f<-function(matrix_diff,area_k,p,ntimes){
   return(sol)
   
 }
-
-
-############################
-# -x1-x2<=-1.5+M*y
-# x1+x2<=0.5+M*(1-y)
-
-###
-# -x1-x2-M*y<=-1.5
-# x1+x2+M*y<=0.5+M
-RCplexConstraints_f<-function(matrix_diff,area_k,p,ntimes){
-  Equ_matrix<-rbind(t(matrix(1:30,nrow=2,ncol=15)),c(32,33))
-  nforEqu=nrow(Equ_matrix)
-  
-  Qmat=matrix_diff
-  cvec=matrix(rep(0,p+nforEqu),nrow=(p+nforEqu),ncol=1)
-  Amat <- matrix(c(rep(1,p),rep(0,nforEqu)),nrow=1,ncol=(p+nforEqu))
-  bvec <- area_k+0.0
-  vtype <- rep("B",(p+nforEqu))
-  ###########################################
-  M=10
-  bvecforEqu<-c(rep(-1.5,nforEqu),rep(0.5+M,nforEqu))
-  AmatforEqu1<-matrix(0,nrow=nforEqu,ncol=(p+nforEqu))
-  AmatforEqu2<-matrix(0,nrow=nforEqu,ncol=(p+nforEqu))
-  for(i in 1:nforEqu){
-    pos=Equ_matrix[i,]
-    AmatforEqu1[i,pos]=-1
-    AmatforEqu1[i,(p+i)]=-M
-    AmatforEqu2[i,pos]=1
-    AmatforEqu2[i,(p+i)]=M
-  }
-  Amat<-rbind(Amat,AmatforEqu1,AmatforEqu2)
-  bvec<-c(bvec,bvecforEqu)
-  Qmat<-rbind(Qmat,matrix(0,nrow=nforEqu,ncol=p))
-  Qmat<-cbind(Qmat,matrix(0,nrow=(p+nforEqu),ncol=nforEqu))
-  sol <- Rcplex(cvec,Amat,bvec,Qmat,objsense="max",sense=c('L'),vtype=vtype,n=ntimes);
-  return(sol)
-  
-}
-
-
-
-
-
-
-
-
 
