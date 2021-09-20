@@ -37,11 +37,6 @@ Theta_f<-function(TrainSi_List,Trainnivector,TrainY,p,h1,h2,lamda1,lamda2,mu1,mu
   
   #######################
   best_pos=1:p
-  # optL1<-optL_f(AllTheta=AllTheta1,dataSi_List=TrainSi_List[Index_Left],nivector=Trainnivector[Index_Left],h)
-  # optL2<-optL_f(AllTheta=AllTheta2,dataSi_List=TrainSi_List[Index_Right],nivector=Trainnivector[Index_Right],h)
-  # optLmax=mu*sum(abs((AllTheta1-AllTheta2)[best_pos,best_pos]))+
-  #   optL1+optL2-
-  #   lamda1*sum(abs(AllTheta1))-lamda2*sum(abs(AllTheta2))
 
   
   ###############################
@@ -62,12 +57,6 @@ Theta_f<-function(TrainSi_List,Trainnivector,TrainY,p,h1,h2,lamda1,lamda2,mu1,mu
     
     if(AOiter==AOiterUsed) break
     
-    #######################
-    # optL1<-optL_f(AllTheta=AllTheta1,dataSi_List=TrainSi_List[Index_Left],nivector=Trainnivector[Index_Left],h)
-    # optL2<-optL_f(AllTheta=AllTheta2,dataSi_List=TrainSi_List[Index_Right],nivector=Trainnivector[Index_Right],h)
-    # optLmax=mu*sum(abs((AllTheta1-AllTheta2)[best_pos,best_pos]))+
-    #   optL1+optL2-
-    #   lamda1*sum(abs(AllTheta1))-lamda2*sum(abs(AllTheta2))
    
   }  
   return(list(AllTheta1=AllTheta1,AllTheta2=AllTheta2,
@@ -79,16 +68,7 @@ loggammap_f<-function(n,p){
   # gammap=exp(loggammap)
   return(loggammap)
 }
-# optL_f<-function(AllTheta,dataSi_List,nivector,h){
-#   invAllTheta=solve(AllTheta)
-#   N=length(dataSi_List)
-#   g=-N*h/2*log(det(AllTheta))
-#   Z=sum(sapply(nivector+h,loggammap_f,p)-sapply(nivector,loggammap_f,p)-(sapply(h,loggammap_f,p)))
-#   for(i in 1:N){g=g-(nivector[i]+h)/2*log(det(nivector[i]*dataSi_List[[i]]+invAllTheta))
-#   Z=Z+(nivector[i]-p-1)/2*log(det(nivector[i]*dataSi_List[[i]]))}
-#   optL=g+Z
-#   return(optL)
-# }
+
 OptAO_f<-function(TrainSi_List,Trainnivector,TrainY,AllTheta1,AllTheta2,pos_c,p,h1,h2,
                   lamda1,lamda2,mu1,mu2,area_k,
                   Opt_method,ntimes,structure,
