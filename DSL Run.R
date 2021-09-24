@@ -63,7 +63,7 @@ TrainSi_List<-dataSi_f(X_List=TrainX_List,nivector=Trainnivector,p)
 
 # DSL training
 Opt_method="RCplex"
-Opt_method="Rsymphony" 
+# Opt_method="Rsymphony" 
 Constraints="NoConstraints"
 # structure='binarystructure'
 structure='weightedstructure'
