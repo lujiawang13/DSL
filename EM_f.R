@@ -40,11 +40,6 @@ EM_f<-function(dataSi_List,nivector,Theta0,Z,pos_c,p,h,lamda,mu,
       Spie=Spie+Di/n/h;
     }
     
-    #####################
-    # optEM<-log(det(Theta2t))+sum(diag(solve(Theta2t)*Spie))+lamda*sum(abs(Theta2t))-mu*sum(abs(diag(pos_c)%*%(Theta2t-Z)%*%diag(pos_c)))
-    # optEM_chain<-c(optEM_chain,optEM)
-    print(paste('EM_iter = ', j));
-    
   
     ###desent
     BCD_result<-BCD_f(H=Spie,Theta0=Theta2t,Z,pos_c,lamda,mu,epsilon=1e-6,

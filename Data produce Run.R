@@ -24,15 +24,14 @@ root="C:\\" # path
 source(paste(root,"Steps_f.R",sep=''))
 source(paste(root,"DataProcedure_f.R",sep=''))
 ########################3
-ni=100
-N1=150
+N1=100
 N2=N1
-p=50;sub_p=5
+p=50;sub_p=40
 h1=100
 h2=h1
 s=0.5
 th=0.5
-
+ni=200
 
 # Theta 1; Theta 2; positions of subgraph
 Theta1procedure_result<-Theta1procedure_f(p,th)

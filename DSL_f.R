@@ -43,7 +43,6 @@ Theta_f<-function(TrainSi_List,Trainnivector,TrainY,p,h1,h2,lamda1,lamda2,mu1,mu
   AOiter=0
   while(sum(abs(AllTheta10-AllTheta1)+abs(AllTheta20-AllTheta2))>0.001){
     AOiter=AOiter+1
-    print(paste("AOiter",AOiter))
     AllTheta10=AllTheta1;AllTheta20=AllTheta2
     TrainResult<-OptAO_f(TrainSi_List,Trainnivector,TrainY,AllTheta1,AllTheta2,pos_c,p,h1,h2,
                          lamda1,lamda2,mu1,mu2,area_k,
@@ -92,5 +91,39 @@ OptAO_f<-function(TrainSi_List,Trainnivector,TrainY,AllTheta1,AllTheta2,pos_c,p,
   
   return(list(AllTheta1=AllTheta1,AllTheta2=AllTheta2,
               pos_matrix=pos_matrix,best_pos=best_pos))
+}
+# Structural Accuracy
+StructuralAcc_f<-function(Estimated_Theta,True_Theta){
+  ############################
+  p=nrow(Estimated_Theta)
+  Estimated_Theta_Structure<-matrix(as.numeric(Estimated_Theta!=0),c(p,p))
+  True_Theta_Structure=matrix(as.numeric(True_Theta!=0),c(p,p))
+  
+  True_positive_num<-0
+  FALSE_positive_num<-0
+  FALSE_negative_num<-0;True_negative_num<-0
+  for(i in 1:(p-1)){
+    for(j in (i+1):p){
+      True_element<-True_Theta_Structure[i,j]
+      Estimated_element<-Estimated_Theta_Structure[i,j]
+      if(True_element==1 & Estimated_element==1){
+        True_positive_num=True_positive_num+1
+      }
+      if(True_element==0 & Estimated_element==1){
+        FALSE_positive_num=FALSE_positive_num+1
+      }
+      if(True_element==1 & Estimated_element==0){
+        FALSE_negative_num=FALSE_negative_num+1
+      }
+      if(True_element==0 & Estimated_element==0){
+        True_negative_num=True_negative_num+1
+      }
+    }
+  }
+  Sensi<-True_positive_num/(True_positive_num+FALSE_negative_num)
+  Speci<-True_negative_num/(True_negative_num+FALSE_positive_num)
+  Accuracy<-(True_positive_num+True_negative_num)/(True_positive_num+FALSE_negative_num+True_negative_num+FALSE_positive_num)
+  return(list(True_positive_num=True_positive_num,FALSE_positive_num=FALSE_positive_num,
+              Sensi=Sensi,Speci=Speci,Accuracy=Accuracy))
 }
 

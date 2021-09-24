@@ -83,6 +83,22 @@ beta_solution_f<-function(beta,V,d,p,lamda,mu,epsilon_beta,
                     bound = 10, verb = 0)
     alphas=attributes(solve_info)$primal
     beta=alphas[1:q]-alphas[(q+1):(2*q)]
+  }else if(betamethod=='cd'){
+    if(mu==0 | pos_c[i]==0){
+      beta<-beta_solution_fwithoutmu(beta,V,d,p,lamda,epsilon_beta)
+    }else{
+      Z11 <- Z[indnoi,indnoi]; Z12 = Z[indnoi,i]
+      pos_c=pos_c[-i]
+
+      betaold <- beta;
+      
+      A_1=V-mu*invTheta11
+      A_2=V+mu*invTheta11
+      A_3=V-mu*invTheta11
+      A_4=V+mu*invTheta11
+      beta<-sapply(1:length(beta),betai_f,A_1,A_2,A_3,A_4,V,invTheta11,Z12,Z,d,pos_c,beta,gam,lamda,mu)
+
+    } 
   }else{
     if(mu==0 | pos_c[i]==0){
       beta<-beta_solution_fwithoutmu(beta,V,d,p,lamda,epsilon_beta)
@@ -207,4 +223,55 @@ BetaOpt_f<-function(x,beta,V,d,lamda,mu,pos_c,Z12,invTheta11,gam,Z,j){
   L=t(beta)%*%V%*%beta-2*t(d)%*%beta+2*lamda*sum(abs(beta))-
     2*mu*sum(abs(diag(pos_c)%*%(beta-Z12)))-mu*abs(t(beta)%*%invTheta11%*%beta+gam-Z[j,j])
   return(L)
+}
+
+betai_f<-function(j,A_1,A_2,A_3,A_4,V,invTheta11,Z12,Z,d,pos_c,beta,gam,lamda,mu){
+  #
+  
+  x_10 = (d[j]+mu*pos_c[j])-(A_1%*%beta)[j]+A_1[j,j]*beta[j];
+  x_1 <- max(0,abs(x_10)-lamda)*sign(x_10)/(V[j,j]-mu*invTheta11[j,j]);
+  beta_1=beta
+  beta_1[j]=x_1
+  #
+  x_20 = (d[j]+mu*pos_c[j])-(A_2%*%beta)[j]+A_2[j,j]*beta[j];
+  x_2 <- max(0,abs(x_20)-lamda)*sign(x_20)/(V[j,j]+mu*invTheta11[j,j]);
+  beta_2=beta
+  beta_2[j]=x_2
+  #
+  x_30 = (d[j]-mu*pos_c[j])-(A_3%*%beta)[j]+A_3[j,j]*beta[j];
+  x_3 <- max(0,abs(x_30)-lamda)*sign(x_30)/(V[j,j]-mu*invTheta11[j,j]);
+  beta_3=beta
+  beta_3[j]=x_3
+  #
+  x_40 = (d[j]-mu*pos_c[j])-(A_4%*%beta)[j]+A_4[j,j]*beta[j];
+  x_4 <- max(0,abs(x_40)-lamda)*sign(x_40)/(V[j,j]+mu*invTheta11[j,j]);
+  beta_4=beta
+  beta_4[j]=x_4
+  
+  
+  x_candidate<-c()
+  if(x_1>=Z12[j] & (t(beta_1)%*%invTheta11%*%beta_1)>=(Z[j,j]-gam)){
+    x_candidate<-c(x_candidate,x_1)
+  }
+  if(x_2>=Z12[j] & (t(beta_2)%*%invTheta11%*%beta_2)<(Z[j,j]-gam)){
+    x_candidate<-c(x_candidate,x_2)
+  }
+  if(x_3<Z12[j] & (t(beta_3)%*%invTheta11%*%beta_3)>=(Z[j,j]-gam)){
+    x_candidate<-c(x_candidate,x_3)
+  }
+  if(x_4<Z12[j] & (t(beta_4)%*%invTheta11%*%beta_4)<(Z[j,j]-gam)){
+    x_candidate<-c(x_candidate,x_4)
+  }
+  
+  if(length(x_candidate)==1){
+    x=x_candidate
+  }else if(length(x_candidate)>1){
+    # L=BetaOpt_f(x,beta,V,d,lamda,mu,pos_c,Z12,invTheta11,gam,Z,j)
+    betaL=sapply(x_candidate,BetaOpt_f,beta,V,d,lamda,mu,pos_c,Z12,invTheta11,gam,Z,j)
+    x=x_candidate[which(betaL==min(betaL))]
+  }else{
+    print("Error in solving beta")
+  }
+  
+  return(x)
 }

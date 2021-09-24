@@ -18,7 +18,6 @@ BCD_f<-function(H,Theta0,Z,pos_c,lamda,mu,epsilon,
   obj <- ob;
 
   iter=0
-  print(paste('BCD_iter = ', iter,'ob=',ob));
   repeat{
     iter=iter+1
     ob.old = ob;
@@ -57,7 +56,6 @@ BCD_f<-function(H,Theta0,Z,pos_c,lamda,mu,epsilon,
     if(abs(ob-ob.old)/abs(ob)<epsilon | abs(norm_f(Theta.old-Theta,'2'))<1e-6 | iter>500){
       break;
     }
-    print(paste('BCD_iter = ', iter,'ob=',ob));
   }
   
   return(list(Theta = Theta, ThetaInv = ThetaInv, obj = obj, niter = iter))
