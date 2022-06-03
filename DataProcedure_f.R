@@ -9,10 +9,10 @@ Theta1procedure_f<-function(p,th){
 }
 Theta2procedure_f<-function(Theta1procedure_result,p,sub_p,s,th){
   Theta_raw_1=Theta1procedure_result$Theta_raw_1
-  indexPos<-which(Theta_raw_1>0,arr.ind = T)
-  Theta_raw_1[indexPos]<-tao_PC_procedure_f(nrow(indexPos),th)
-  indexNeg<-which(Theta_raw_1<0,arr.ind = T)
-  Theta_raw_1[indexNeg]<-(tao_PC_procedure_f(nrow(indexNeg),th))*(-1)
+  # indexPos<-which(Theta_raw_1>0,arr.ind = T)
+  # Theta_raw_1[indexPos]<-tao_PC_procedure_f(nrow(indexPos),th)
+  # indexNeg<-which(Theta_raw_1<0,arr.ind = T)
+  # Theta_raw_1[indexNeg]<-(tao_PC_procedure_f(nrow(indexNeg),th))*(-1)
 
   diag(Theta_raw_1) <- 1
   # Theta2
